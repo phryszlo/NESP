@@ -5,10 +5,25 @@ const cors = require ('cors')
 const app = express()
 
 var corsOptions = {
-  origin: 'http://localhost:8081'
+  origin: ['http://localhost:8081','http://45.55.50.36:8081']
 }
 
-app.use(cors(corsOptions))
+
+
+app.use(function(req, res, next) {
+  var allowedOrigins = ['http://localhost:8081','http://45.55.50.36:8081']
+  var origin = req.headers.origin;
+  if(allowedOrigins.indexOf(origin) > -1){
+       res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', true);
+  return next();
+});
+
+//app.use(cors(corsOptions))
 
 app.use(bodyParser.json())
 
